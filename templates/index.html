@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Boilerplate App</h2>
+
+<form class="form-horizontal2 boxed" id="submitBasic" method="POST" action="javascript:">
+
+    {% csrf_token %}
+    <div class="panel panel-info">
+        <div class="col-md-6">
+            <div class="form-group">
+
+                <label for="pan_number" id="pan_number_label">Name</label>
+                <input class="form-control" placeholder="name" type="text" name="" maxlength="16" id="name" value="">
+
+            </div>
+            <div class="form-group">
+                <label for="pan_exp" id="pan_exp_label">Email</label>
+                <input class="form-control" placeholder="email" type="text" name="" maxlength="" id="email">
+            </div>
+
+
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </div>
+</form>
+
+
+
+
+<h1> Table</h1>
+<div class="col-lg-6">
+    <table class="table table-striped" id="dataTable">
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>name</th>
+                <th>email</th>
+            </tr>
+
+        </thead>
+
+
+
+    </table>
+
+</div>
+
+
+<script>
+    // js
+    $(document).ready(function () {
+        $('#submitBasic').submit(function () {
+
+            var data = {};
+            data.name = $('#name').val();
+            data.email = $('#email').val();
+
+
+            $.ajax({
+                type: "POST",
+                url: "http://127.0.0.1:8000/basicPost/",
+                data: JSON.stringify(data),
+                // 
+                contentType: "application/json; charset=utf-8",
+                dataType: "JSON",
+                beforeSend: function (xhr, settings) {
+                    xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                },
+
+                success: function (data) {
+                    alert('ajax post call successfull' + ' ' + data);
+                    location.reload();
+                },
+                failure: function (errMsg) {
+                    alert(errMsg);
+                }
+            });
+        });
+    });
+
+
+    $(document).ready(function () {
+
+
+        $.ajax({
+            url: "http://127.0.0.1:8000/basicGet/",
+            dataType: "JSON",
+            beforeSend: function (xhr, settings) {
+                xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+            },
+
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var row = $('<tr><td>' + data[i].basic_id + '</td>' + '<td>' + data[i].name + '</td>' + '<td>' + data[i].email + '</td></tr>')
+                    $('#dataTable').append(row);
+                }
+                alert('ajax get call successful' + ' ' + data);
+
+            },
+            failure: function (errMsg) {
+                alert(errMsg);
+            }
+        });
+
+    });
+
+
+
+</script>
+{% endblock content %}
