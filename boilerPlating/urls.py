@@ -8,7 +8,7 @@ from django.views.generic.base import TemplateView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('index/', views.index.as_view(), name='index'),
-    path('basicPost/', views.basicPost.as_view(), name='basicGet'),
+    path('basicPost/', views.basicPost.as_view(), name='basicPost'),
     path('basicGet/', views.basicGet.as_view(), name='basicGet'),
 ]
 
